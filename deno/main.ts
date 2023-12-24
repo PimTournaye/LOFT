@@ -20,6 +20,8 @@ const client = new MongoClient({
   },
 });
 
+const db = client.database("LOFT");
+const test = db.collection("Dakar-Tests");
 
 
 ////////////////////
@@ -31,6 +33,18 @@ io.on("connection", (socket) => {
   console.log(`socket ${socket.id} connected`);
 
   socket.emit("hello", "world");
+
+  socket.on("pigeon", async (data) => {
+    console.log(data);
+
+    //  Push data to MongoDB
+    // Insert a document with the current timestamp
+    // const insertId = await test.insertOne({
+    //   data,
+    //   createdAt: new Date(),
+    // });
+    
+  });
 
   socket.on("disconnect", (reason) => {
     console.log(`socket ${socket.id} disconnected due to ${reason}`);
