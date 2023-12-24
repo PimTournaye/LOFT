@@ -1,34 +1,26 @@
 import { serve } from "https://deno.land/std@0.150.0/http/server.ts";
 import { Server } from "https://deno.land/x/socket_io@0.2.0/mod.ts";
-import {
-  Bson,
-  MongoClient,
-} from "https://deno.land/x/mongo@v0.32.0/mod.ts";
+// Environment Variables
+import { load } from "https://deno.land/std@0.210.0/dotenv/mod.ts";
+const env = await load();
 
 ////////////////////
 ////// MongoDB /////
 ////////////////////
+import {
+  MongoClient,
+  ObjectId,
+} from "https://deno.land/x/atlas_sdk@v1.1.2/mod.ts";
 
-const client = new MongoClient();
-const collection = "Dakar-Tests"
-
-// Connecting to a Mongo Atlas Database
-await client.connect({
-  db: "LOFT",
-  tls: true,
-  servers: [
-    {
-      host: Deno.env.get("MONGODB_URL"),
-      port: 27017,
-    },
-  ],
-  credential: {
-    username: Deno.env.get("MONGODB_USERNAME"),
-    password: Deno.env.get("MONGODB_PASSWORD"),
-    db: "LOFT",
-    mechanism: "SCRAM-SHA-1",
+const client = new MongoClient({
+  endpoint: "https://data.mongodb-api.com/app/application-0-zsavc/endpoint/data/v1",
+  dataSource: "Cluster0",
+  auth: {
+    apiKey: Deno.env.get("MONGODB_API_KEY"),
   },
 });
+
+
 
 ////////////////////
 //// Socket.io /////
