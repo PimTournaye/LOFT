@@ -84,28 +84,15 @@ void loop() // run over and over again
     Serial.println((int)GPS.fixquality);
     if (GPS.fix)
     {
-      Serial.print("Location: ");
-      Serial.print(GPS.latitude, 4);
-      Serial.print(GPS.lat);
-      Serial.print(", ");
-      Serial.print(GPS.longitude, 4);
-      Serial.println(GPS.lon);
-      Serial.print("Speed (knots): ");
-      Serial.println(GPS.speed);
-      Serial.print("Angle: ");
-      Serial.println(GPS.angle);
-      Serial.print("Altitude: ");
-      Serial.println(GPS.altitude);
-      Serial.print("Satellites: ");
-      Serial.println((int)GPS.satellites);
-      Serial.print("Antenna status: ");
-      Serial.println((int)GPS.antenna);
+      
+      // Set up JSON to send to server
 
-      doc["latitude"] = 123.34569023498734;
-      doc["longitude"] = 123.35643234987235;
-      doc["altitude"] = 123.23456334598734;
-      doc["speed"] = 1.352234982304983;
-      doc["angle"] = 1.4353440983405983;
+
+      // doc["latitude"] = GPS.latitude;
+      // doc["longitude"] = GPS.longitude;
+      // doc["altitude"] = GPS.altitude;
+      // doc["speed"] = GPS.speed;
+      // doc["angle"] = GPS.angle;
 
       // serializeJson(doc, output);
 
