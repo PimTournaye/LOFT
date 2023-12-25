@@ -13,7 +13,8 @@ import {
 } from "https://deno.land/x/atlas_sdk@v1.1.2/mod.ts";
 
 const client = new MongoClient({
-  endpoint: "https://data.mongodb-api.com/app/application-0-zsavc/endpoint/data/v1",
+  endpoint:
+    "https://data.mongodb-api.com/app/application-0-zsavc/endpoint/data/v1",
   dataSource: "Cluster0",
   auth: {
     apiKey: Deno.env.get("MONGODB_API_KEY"),
@@ -23,11 +24,12 @@ const client = new MongoClient({
 const db = client.database("LOFT");
 const test = db.collection("Dakar-Tests");
 
-
 ////////////////////
 //// Socket.io /////
 ////////////////////
 const io = new Server();
+
+console.log("Socket.io server running on port 3000 / 80");
 
 io.on("connection", (socket) => {
   console.log(`socket ${socket.id} connected`);
@@ -43,7 +45,6 @@ io.on("connection", (socket) => {
     //   data,
     //   createdAt: new Date(),
     // });
-    
   });
 
   socket.on("disconnect", (reason) => {
@@ -53,4 +54,35 @@ io.on("connection", (socket) => {
 
 await serve(io.handler(), {
   port: 3000,
+  // Serve the a hello world page on default route
+  "/": async (req) => {
+    const html = `
+      <html>
+        <head>
+          <script src="https://cdnjs
+          .cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
+          <script>
+            const socket = io();
+            socket.on("hello", (data) => {
+              console.log(data);
+              });
+              socket.on("connect", () => {
+                console.log("connected");
+                socket.emit("pigeon", "Hello from the browser!");
+                });
+                socket.on("disconnect", () => {
+                  console.log("disconnected");
+                  });
+                  </script>
+                  </head>
+                  <body>
+                    <h1>Hello World!</h1>
+                    </body>
+                    </html>`;
+    return new Response(html, {
+      headers: {
+        "content-type": "text/html",
+      },
+    });
+  },
 });
