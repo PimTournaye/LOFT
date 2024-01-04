@@ -1,17 +1,19 @@
-import { serve } from "https://deno.land/std@0.140.0/http/server.ts";
-
-serve((req) => {
-  const upgrade = req.headers.get("upgrade") || "";
-  if (upgrade.toLowerCase() != "websocket") {
-    return new Response("request isn't trying to upgrade to websocket.");
+Deno.serve((req) => {
+  if (req.headers.get("upgrade") != "websocket") {
+    return new Response(null, { status: 501 });
   }
   const { socket, response } = Deno.upgradeWebSocket(req);
-  socket.onopen = () => console.log("socket opened");
-  socket.onmessage = (e) => {
-    console.log("socket message:", e.data);
-    socket.send(new Date().toString());
-  };
-  socket.onerror = (e) => console.log("socket errored:", e.message);
-  socket.onclose = () => console.log("socket closed");
+  socket.addEventListener("open", () => {
+    console.log("a client connected!");
+  });
+  socket.addEventListener("message", (event) => {
+    if (event.data === "ping") {
+      socket.send("pong");
+    }
+  });
+
+  socket.addEventListener("pigeon", (event) => {
+    console.log(event.data);
+  });
   return response;
 });
